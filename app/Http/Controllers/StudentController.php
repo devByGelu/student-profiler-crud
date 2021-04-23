@@ -26,7 +26,13 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'idNumber' => ['required', 'integer', 'gt:0', 'unique:App\Models\Student,idNumber'], 'slmisNumber' => ['required', 'integer', 'gt:0', 'unique:App\Models\Student,slmisNumber'],
+            'sex' => ['required', 'in:Male,Female'], 'firstName' => ['required', 'alpha', 'between:2,20'],
+            'middleName' => ['required', 'alpha', 'between:2,20'], 'lastName' => ['required', 'alpha', 'between:2,20'], 'birthday' => ['required', 'date'],
+        ]);
+
+        return Student::create($request->all());
     }
 
     /**
