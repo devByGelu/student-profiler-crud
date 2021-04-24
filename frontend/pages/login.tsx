@@ -17,6 +17,7 @@ import React from "react";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { motion } from "framer-motion";
 
 export default function SignInPage() {
     const router = useRouter();
@@ -65,7 +66,14 @@ export default function SignInPage() {
     }, []);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        <motion.div
+            className="flex flex-col items-center justify-center min-h-screen"
+            layoutId="login"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            exit={{ opacity: 0 }}
+        >
             {checkingAuth ? (
                 <Spinner />
             ) : (
@@ -133,6 +141,6 @@ export default function SignInPage() {
                     </div>
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 }
