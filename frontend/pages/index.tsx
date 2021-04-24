@@ -50,6 +50,7 @@ export default function Home() {
             setUser(response.data);
         } catch (error) {
             console.log(error.toJSON());
+            router.push("/login");
         }
     };
 
