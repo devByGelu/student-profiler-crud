@@ -16,7 +16,13 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { select, selectStudent, IStudent } from "../student/studentSlice";
+import {
+    select,
+    selectStudent,
+    IStudent,
+    selectMode,
+    setMode,
+} from "../student/studentSlice";
 import { Form, Field } from "react-final-form";
 import { AdaptedRadioGroup, InputControl } from "./final-form-helpers";
 import axios, { AxiosResponse } from "axios";
@@ -29,25 +35,43 @@ export default function SelectedStudenFormDialog({
 }) {
     const dispatch = useAppDispatch();
     const student = useAppSelector(selectStudent);
+    const mode = useAppSelector(selectMode);
     const handleClose = () => {
-        dispatch(select(null));
+        dispatch(select({ student: null, mode: "update" }));
+        dispatch(setMode("update"));
     };
     const cancelRef = React.useRef();
     const handleSubmit = async (values: IStudent) => {
         try {
-            const res: AxiosResponse = await axios.patch(
-                `http://localhost:8000/api/students/${student.id}`,
-                {
-                    firstName: values.firstName,
-                    middleName: values.middleName,
-                    lastName: values.lastName,
-                    idNumber: values.idNumber,
-                    slmisNumber: values.slmisNumber,
-                    birthday: values.birthday,
-                    sex: values.sex,
-                }
-            );
-            console.log(res.data);
+            if (mode === "update") {
+                const res: AxiosResponse = await axios.patch(
+                    `http://localhost:8000/api/students/${student.id}`,
+                    {
+                        firstName: values.firstName,
+                        middleName: values.middleName,
+                        lastName: values.lastName,
+                        idNumber: values.idNumber,
+                        slmisNumber: values.slmisNumber,
+                        birthday: values.birthday,
+                        sex: values.sex,
+                    }
+                );
+                console.log(res.data);
+            } else {
+                const res: AxiosResponse = await axios.post(
+                    `http://localhost:8000/api/students`,
+                    {
+                        firstName: values.firstName,
+                        middleName: values.middleName,
+                        lastName: values.lastName,
+                        idNumber: values.idNumber,
+                        slmisNumber: values.slmisNumber,
+                        birthday: values.birthday,
+                        sex: values.sex,
+                    }
+                );
+                console.log(res.data);
+            }
             handleClose();
             handleSuccess();
         } catch (error) {
@@ -64,7 +88,7 @@ export default function SelectedStudenFormDialog({
             <AlertDialog
                 motionPreset="slideInBottom"
                 onClose={handleClose}
-                isOpen={student !== null}
+                isOpen={student !== null || mode === "create"}
                 isCentered
                 leastDestructiveRef={cancelRef}
             >
@@ -75,7 +99,10 @@ export default function SelectedStudenFormDialog({
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
                         <Form
-                            initialValues={{ ...student }}
+                            initialValues={{
+                                ...student,
+                                sex: student ? student.sex : "Male",
+                            }}
                             validateOnChange={false}
                             validateOnBlur={false}
                             subscription={{
@@ -122,7 +149,7 @@ export default function SelectedStudenFormDialog({
                                                     component={
                                                         AdaptedRadioGroup
                                                     }
-                                                    label="Favorite Color"
+                                                    label="Sex"
                                                 >
                                                     <Radio value="Male">
                                                         Male
@@ -155,7 +182,9 @@ export default function SelectedStudenFormDialog({
                                                 type="submit"
                                                 disabled={submitting}
                                             >
-                                                Update
+                                                {mode === "update"
+                                                    ? "Update"
+                                                    : "Create"}
                                             </Button>
                                         </AlertDialogFooter>
                                     </form>
