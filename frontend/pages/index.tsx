@@ -154,7 +154,7 @@ export default function Home() {
 
                         <div>
                             <span className="text-gray-500">Hello, </span>
-                            {" " + user?.email}
+                            {" " + user?.name}
                         </div>
                         <div className="ml-auto hidden sm:block">
                             <LogoutBtn />

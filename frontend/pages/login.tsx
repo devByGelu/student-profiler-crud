@@ -137,7 +137,7 @@ export default function SignInPage() {
                     </Button>
                     <div className="text-gray-500 mt-5 text-center">
                         Don't have an account?{" "}
-                        <Link href="/signup">Sign up now</Link>
+                        <Link href="/register">Register now</Link>
                     </div>
                 </div>
             )}
