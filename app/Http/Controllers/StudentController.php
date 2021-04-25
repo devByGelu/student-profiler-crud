@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
@@ -54,23 +55,28 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(Request $request, $id)
     {
         //
         if ($request->method() == 'PUT') {
             $request->validate([
-                'idNumber' => ['required', 'integer', 'gt:0', 'unique:App\Models\Student,idNumber'], 'slmisNumber' => ['required', 'integer', 'gt:0', 'unique:App\Models\Student,slmisNumber'],
-                'sex' => ['required', 'in:Male,Female'], 'firstName' => ['required', 'alpha', 'between:2,20'],
-                'middleName' => ['required', 'alpha', 'between:2,20'], 'lastName' => ['required', 'alpha', 'between:2,20'], 'birthday' => ['required', 'date'],
+                'idNumber' => ['required', 'integer', 'gt:0', Rule::unique('students')->ignore($id)],
+                'slmisNumber' => ['required', 'integer', 'gt:0', Rule::unique('students')->ignore($id)],
+                'sex' => ['required', 'in:Male,Female'],
+                'firstName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'between:2,20'],
+                'middleName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'between:2,20'],
+                'lastName' => ['required', 'alpha', 'between:2,20'], 'birthday' => ['required', 'date'],
+                'birthday' => ['required', 'date'],
             ]);
         } else {
             $request->validate([
-                'idNumber' => ['sometimes', 'integer', 'gt:0', 'unique:App\Models\Student,idNumber'],
-                'slmisNumber' => ['sometimes', 'integer', 'gt:0', 'unique:App\Models\Student,slmisNumber'],
+                'idNumber' => ['sometimes', 'integer', 'gt:0',  Rule::unique('students')->ignore($id),],
+                'slmisNumber' => ['sometimes', 'integer', 'gt:0', Rule::unique('students')->ignore($id)],
                 'sex' => ['sometimes', 'in:Male,Female'],
-                'firstName' => ['sometimes', 'alpha', 'between:2,20'],
-                'middleName' => ['sometimes', 'alpha', 'between:2,20'],
-                'lastName' => ['sometimes', 'alpha', 'between:2,20'],
+                'firstName' => ['sometimes', 'regex:/^[\pL\s\-]+$/u', 'between:2,20'],
+                'middleName' => ['sometimes', 'regex:/^[\pL\s\-]+$/u', 'between:2,20'],
+                'lastName' => ['sometimes', 'regex:/^[\pL\s\-]+$/u', 'between:2,20'],
                 'birthday' => ['sometimes', 'date'],
             ]);
         }

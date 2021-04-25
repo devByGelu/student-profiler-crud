@@ -2,23 +2,15 @@ import axios, { AxiosResponse } from "axios";
 import DataTable from "react-data-table-component";
 import Head from "next/head";
 
-import { GetStaticProps } from "next";
-import Router from "next/router";
 import React from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
-import { Button, Divider, useAccordionContext } from "@chakra-ui/react";
+import { Button, Divider, Spinner } from "@chakra-ui/react";
+import { IStudent, select, selectStudent } from "../student/studentSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import SelectedStudenFormDialog from "../components/SelectedStudenFormDialog";
 
 export default function Home() {
-    interface Student {
-        idNnumber: number;
-        fName: string;
-        lName: string;
-        mName: string;
-        birthday: string;
-        sex: string;
-        slmisNumber: number;
-    }
     interface User {
         created_at: string;
         email: string;
@@ -29,7 +21,7 @@ export default function Home() {
     }
     const router = useRouter();
     const [user, setUser] = React.useState<null | User>(null);
-    const [students, setStudents] = React.useState<Student[]>([]);
+    const [students, setStudents] = React.useState<IStudent[]>([]);
     const handleClickLogout = async () => {
         try {
             await axios.post("http://localhost:8000/logout");
@@ -72,6 +64,12 @@ export default function Home() {
         if (!user) getUser();
         if (!students.length) getStudents();
     }, [user, user?.id]);
+    const dispatch = useAppDispatch();
+
+    const handleRowClicked = (student: IStudent) => {
+        dispatch(select(student));
+    };
+
     const LogoutBtn = () => {
         return (
             <Button
@@ -112,40 +110,51 @@ export default function Home() {
                 <title>Student Profiler</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="flex flex-col w-full px-5 border-gray-200">
-                <div className="text-2xl sm:text-3xl flex container flex-col sm:flex-row sm:items-center ">
-                    <div className="ml-auto mb-5 sm:hidden">
-                        <LogoutBtn />
+            {!user ? (
+                <Spinner />
+            ) : (
+                <div className="flex flex-col w-full px-5 border-gray-200">
+                    <div className="text-2xl sm:text-3xl flex container flex-col sm:flex-row sm:items-center ">
+                        <div className="ml-auto mb-5 sm:hidden">
+                            <LogoutBtn />
+                        </div>
+
+                        <div>
+                            <span className="text-gray-500">Hello, </span>
+                            {" " + user?.email}
+                        </div>
+                        <div className="ml-auto hidden sm:block">
+                            <LogoutBtn />
+                        </div>
+                    </div>
+                    <Divider className="mb-10 mt-5" />
+                    <div className="text-2xl font-bold text-primary">
+                        Students
                     </div>
 
-                    <div>
-                        <span className="text-gray-500">Hello, </span>
-                        {" " + user?.email}
-                    </div>
-                    <div className="ml-auto hidden sm:block">
-                        <LogoutBtn />
-                    </div>
+                    <Divider className="mb-10 mt-5" width={300} />
+                    <DataTable
+                        onRowClicked={handleRowClicked}
+                        noHeader
+                        customStyles={{
+                            headCells: { style: { fontWeight: 700 } },
+                        }}
+                        highlightOnHover
+                        pointerOnHover
+                        data={students}
+                        columns={[
+                            { name: "ID Number", selector: "idNumber" },
+                            { name: "SLMIS Number", selector: "slmisNumber" },
+                            { name: "First Name", selector: "firstName" },
+                            { name: "Middle Name", selector: "middleName" },
+                            { name: "Last Name", selector: "lastName" },
+                            { name: "Birthday", selector: "birthday" },
+                            { name: "Sex", selector: "sex" },
+                        ]}
+                    />
+                    <SelectedStudenFormDialog />
                 </div>
-                <Divider className="mb-10 mt-5" />
-                <div className="text-2xl font-bold text-primary">Students</div>
-
-                <Divider className="mb-10 mt-5" width={300} />
-                <DataTable
-                    noHeader
-                    highlightOnHover
-                    pointerOnHover
-                    data={students}
-                    columns={[
-                        { name: "ID Number", selector: "idNumber" },
-                        { name: "SLMIS Number", selector: "slmisNumber" },
-                        { name: "First Name", selector: "fName" },
-                        { name: "Middle Name", selector: "mName" },
-                        { name: "Last Name", selector: "lName" },
-                        { name: "Birthday", selector: "birthday" },
-                        { name: "Sex", selector: "sex" },
-                    ]}
-                />
-            </div>
+            )}
         </motion.div>
     );
 }

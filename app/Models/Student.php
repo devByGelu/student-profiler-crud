@@ -9,8 +9,6 @@ use Laravel\Sanctum\HasApiTokens;
 class Student extends Model
 {
     use HasFactory, HasApiTokens;
-    protected $primaryKey = 'idNumber';
-    public $incrementing = false;
     protected $fillable = ['idNumber', 'slmisNumber', 'sex', 'firstName', 'middleName', 'lastName', 'birthday'];
     public $timestamps = false;
 }
