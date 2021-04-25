@@ -6,7 +6,12 @@ import React from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import { Button, Divider, Fade, Spinner } from "@chakra-ui/react";
-import { IStudent, select, selectStudent } from "../student/studentSlice";
+import {
+    IStudent,
+    select,
+    selectStudent,
+    setMode,
+} from "../student/studentSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedStudenFormDialog from "../components/SelectedStudenFormDialog";
 import _ from "lodash";
@@ -29,7 +34,12 @@ export default function Home() {
             router.push("/login");
         } catch (error) {
             console.log(error.toJSON());
+            router.push("/login");
         }
+    };
+
+    const handleClickAddStudent = async () => {
+        dispatch(setMode("create"));
     };
 
     const getUser = async () => {
@@ -68,7 +78,7 @@ export default function Home() {
     const dispatch = useAppDispatch();
 
     const handleRowClicked = (student: IStudent) => {
-        dispatch(select(student));
+        dispatch(select({ student, mode: "update" }));
     };
 
     const LogoutBtn = () => {
@@ -107,7 +117,7 @@ export default function Home() {
         setSelectedToDelete(selectedRows);
     };
 
-    const handleDeleteSelected = async () => {
+    const handleClickDeleteSelected = async () => {
         try {
             await Promise.all(
                 _.map(selectedToDelete, (s) =>
@@ -123,7 +133,7 @@ export default function Home() {
 
     return (
         <motion.div
-            className="flex flex-col items-center justify-center min-h-screen max-w-3xl mx-auto"
+            className="flex flex-col items-center justify-center min-h-screen max-w-4xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -155,16 +165,24 @@ export default function Home() {
                         <div className="text-2xl font-bold text-primary">
                             Students
                         </div>
-                        <Fade in={selectedToDelete.length > 0}>
+                        <div className="ml-auto flex flex-col sm:flex-row items-end gap-2">
+                            <Fade in={selectedToDelete.length > 0}>
+                                <Button
+                                    variant="ghost"
+                                    colorScheme="red"
+                                    onClick={handleClickDeleteSelected}
+                                >
+                                    Delete ({selectedToDelete.length})
+                                </Button>
+                            </Fade>
                             <Button
                                 variant="ghost"
-                                colorScheme="red"
-                                className="ml-auto"
-                                onClick={handleDeleteSelected}
+                                colorScheme="facebook"
+                                onClick={handleClickAddStudent}
                             >
-                                Delete
+                                Add Student
                             </Button>
-                        </Fade>
+                        </div>
                     </div>
 
                     <Divider className="mb-10 mt-5" width={300} />
