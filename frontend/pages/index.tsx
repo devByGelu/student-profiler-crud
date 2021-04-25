@@ -152,7 +152,7 @@ export default function Home() {
                             { name: "Sex", selector: "sex" },
                         ]}
                     />
-                    <SelectedStudenFormDialog />
+                    <SelectedStudenFormDialog handleSuccess={getStudents} />
                 </div>
             )}
         </motion.div>

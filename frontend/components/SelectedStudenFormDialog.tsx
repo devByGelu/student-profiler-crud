@@ -22,7 +22,11 @@ import { AdaptedRadioGroup, InputControl } from "./final-form-helpers";
 import axios, { AxiosResponse } from "axios";
 import _ from "lodash";
 
-export default function SelectedStudenFormDialog() {
+export default function SelectedStudenFormDialog({
+    handleSuccess,
+}: {
+    handleSuccess: () => void;
+}) {
     const dispatch = useAppDispatch();
     const student = useAppSelector(selectStudent);
     const handleClose = () => {
@@ -45,6 +49,7 @@ export default function SelectedStudenFormDialog() {
             );
             console.log(res.data);
             handleClose();
+            handleSuccess();
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 const errors: { [key: string]: string[] } =
