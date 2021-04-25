@@ -5,10 +5,11 @@ import Head from "next/head";
 import React from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
-import { Button, Divider, Spinner } from "@chakra-ui/react";
+import { Button, Divider, Fade, Spinner } from "@chakra-ui/react";
 import { IStudent, select, selectStudent } from "../student/studentSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedStudenFormDialog from "../components/SelectedStudenFormDialog";
+import _ from "lodash";
 
 export default function Home() {
     interface User {
@@ -98,6 +99,28 @@ export default function Home() {
         );
     };
 
+    const [selectedToDelete, setSelectedToDelete] = React.useState<IStudent[]>(
+        []
+    );
+
+    const handleSelectedRowsChange = ({ selectedRows }) => {
+        setSelectedToDelete(selectedRows);
+    };
+
+    const handleDeleteSelected = async () => {
+        try {
+            await Promise.all(
+                _.map(selectedToDelete, (s) =>
+                    axios.delete(`http://localhost:8000/api/students/${s.id}`)
+                )
+            );
+            setSelectedToDelete([]);
+            getStudents();
+        } catch (error) {
+            console.log(error.toJSON());
+        }
+    };
+
     return (
         <motion.div
             className="flex flex-col items-center justify-center min-h-screen max-w-3xl mx-auto"
@@ -128,8 +151,20 @@ export default function Home() {
                         </div>
                     </div>
                     <Divider className="mb-10 mt-5" />
-                    <div className="text-2xl font-bold text-primary">
-                        Students
+                    <div className="flex items-center">
+                        <div className="text-2xl font-bold text-primary">
+                            Students
+                        </div>
+                        <Fade in={selectedToDelete.length > 0}>
+                            <Button
+                                variant="ghost"
+                                colorScheme="red"
+                                className="ml-auto"
+                                onClick={handleDeleteSelected}
+                            >
+                                Delete
+                            </Button>
+                        </Fade>
                     </div>
 
                     <Divider className="mb-10 mt-5" width={300} />
@@ -142,6 +177,8 @@ export default function Home() {
                         highlightOnHover
                         pointerOnHover
                         data={students}
+                        selectableRows
+                        onSelectedRowsChange={handleSelectedRowsChange}
                         columns={[
                             { name: "ID Number", selector: "idNumber" },
                             { name: "SLMIS Number", selector: "slmisNumber" },
