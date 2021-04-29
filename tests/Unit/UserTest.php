@@ -38,5 +38,29 @@ class UserTest extends TestCase
         $response->dump();
         $response->assertSessionHasErrors(['name']);
     }
+    
+    public function test_login_incorrect_password()
+    {
+        $this->seed(UserSeeder::class);
+        $response = $this->post('/login', ['email' => 'cardo@yahoo.com', 'password' => 'password1']);
+        $response->dump();
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    public function test_login_unexistent_email()
+    {
+        $this->seed(UserSeeder::class);
+        $response = $this->post('/login', ['email' => 'cardoo@yahoo.com', 'password' => 'password1']);
+        $response->dump();
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    public function test_login_valid_details()
+    {
+        $this->seed(UserSeeder::class);
+        $response = $this->post('/login', ['email' => 'cardo@yahoo.com', 'password' => 'password']);
+        $response->dump();
+        $response->assertRedirect(('/home'));
+    }
 
 }
