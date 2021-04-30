@@ -10,17 +10,19 @@ class FullNameUnique implements Rule
     private $firstName;
     private $middleName;
     private $lastName;
+    private $id;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($f, $m, $l)
+    public function __construct($f, $m, $l, $id)
     {
         //
         $this->firstName = $f;
         $this->middleName = $m;
         $this->lastName = $l;
+        $this->id = $id;
     }
 
     /**
@@ -33,6 +35,9 @@ class FullNameUnique implements Rule
     public function passes($attribute, $value)
     {
         //
+        if ($this->id > 0) {
+            return Student::where('firstName', $this->firstName)->where('middleName', $this->middleName)->where('lastName', $this->lastName)->count() == 0;
+        }
         $unique = Student::where('firstName', $this->firstName)->where('middleName', $this->middleName)->where('lastName', $this->lastName)->count() == 0;
         return $unique;
     }
