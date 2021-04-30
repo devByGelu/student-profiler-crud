@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Rules\FullNameUnique;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -31,7 +32,7 @@ class StudentController extends Controller
             'idNumber' => ['required', 'integer', 'gt:0', 'unique:students'],
             'slmisNumber' => ['required', 'integer', 'gt:0', 'unique:students'],
             'sex' => ['required', 'in:Male,Female'],
-            'firstName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'between:2,20'],
+            'firstName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'between:2,20', new FullNameUnique($request->input('firstName'), $request->input('middleName'), $request->input('lastName'))],
             'middleName' => ['required', 'regex:/^[\pL\s\-]+$/u', 'between:2,20'],
             'lastName' => ['required', 'alpha', 'between:2,20'], 'birthday' => ['required', 'date'],
             'birthday' => ['required', 'date'],
