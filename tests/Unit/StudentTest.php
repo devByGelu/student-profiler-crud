@@ -431,4 +431,45 @@ class StudentTest extends TestCase
 
         $response->assertStatus(200);
     }
+    public function test_delete_invalid_id()
+    {
+        Sanctum::actingAs(User::factory()->create()
+        );
+        $this->seed(StudentSeeder::class);
+
+        $response = $this->delete('api/students/' . 100);
+
+        $response->assertStatus(404);
+    }
+    public function test_delete_no_auth_invalid_id()
+    {
+        $this->seed(StudentSeeder::class);
+
+        $response = $this->delete('api/students/' . 100);
+
+        $response->assertStatus(302);
+    }
+    public function test_delete_no_auth_valid_id()
+    {
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->delete('api/students/' . $id);
+
+        $response->assertStatus(302);
+    }
+    public function test_delete_valid_id()
+    {
+        Sanctum::actingAs(User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->delete('api/students/' . $id);
+
+        $response->assertStatus(200);
+    }
 }
