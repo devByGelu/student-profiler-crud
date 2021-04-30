@@ -316,4 +316,119 @@ class StudentTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_put_id_number_taken()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $this->seed(StudentSeeder::class);
+
+        error_log(json_encode(User::all()));
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20101013809', 'slmisNumber' => '32151', 'sex' => 'Male', 'firstName' => 'John', 'middleName' => 'Alexis', 'lastName' => 'Gonzaga', 'birthday' => '2020/10/10']);
+        $response->assertSessionHasErrors(['idNumber']);
+    }
+
+    public function test_put_slmis_number_taken()
+    {
+
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32000', 'sex' => 'Male', 'firstName' => 'John', 'middleName' => 'Alexis', 'lastName' => 'Gonzaga', 'birthday' => '2020/10/10']);
+
+        $response->assertSessionHasErrors(['slmisNumber']);
+    }
+
+    public function test_put_invalid_sex()
+    {
+
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $this->seed(StudentSeeder::class);
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32159', 'sex' => 'Shemale', 'firstName' => 'John', 'middleName' => 'Alexis', 'lastName' => 'Gonzaga', 'birthday' => '2020/10/10']);
+
+        $response->assertSessionHasErrors(['sex']);
+    }
+
+    public function test_put_unique_name()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $this->seed(StudentSeeder::class);
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32159', 'sex' => 'Female', 'firstName' => 'Iris', 'middleName' => 'Clear', 'lastName' => 'Suaner', 'birthday' => '2020/10/10']);
+
+        $response->assertSessionHasErrors(['firstName']);
+    }
+
+    public function test_put_no_auth_id_number_taken()
+    {
+        $this->seed(StudentSeeder::class);
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20180013809', 'slmisNumber' => '32151', 'sex' => 'Male', 'firstName' => 'John', 'middleName' => 'Alexis', 'lastName' => 'Gonzaga', 'birthday' => '2020/10/10']);
+
+        $response->assertStatus(302);
+    }
+    public function test_put_no_auth_slmis_number_taken()
+    {
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32151', 'sex' => 'Male', 'firstName' => 'John', 'middleName' => 'Alexis', 'lastName' => 'Gonzaga', 'birthday' => '2020/10/10']);
+
+        $response->assertStatus(302);
+    }
+    public function test_put_no_auth_invalid_sex()
+    {
+        $this->seed(StudentSeeder::class);
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32159', 'sex' => 'Shemale', 'firstName' => 'John', 'middleName' => 'Alexis', 'lastName' => 'Gonzaga', 'birthday' => '2020/10/10']);
+
+        $response->assertStatus(302);
+    }
+    public function test_put_no_auth_unique_name()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32159', 'sex' => 'Female', 'firstName' => 'Iris', 'middleName' => 'Clear', 'lastName' => 'Suaner', 'birthday' => '2020/10/10']);
+
+        $response->assertStatus(302);
+    }
+    public function test_put_no_auth_valid_details()
+    {
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32159', 'sex' => 'Female', 'firstName' => 'Irish', 'middleName' => 'Clear', 'lastName' => 'Suaner', 'birthday' => '2020/10/10']);
+
+        $response->assertStatus(302);
+    }
+    public function test_put_valid_details()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $this->seed(StudentSeeder::class);
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32159', 'sex' => 'Female', 'firstName' => 'Irish', 'middleName' => 'Clear', 'lastName' => 'Suaner', 'birthday' => '2020/10/10']);
+
+        $response->assertStatus(200);
+    }
 }
