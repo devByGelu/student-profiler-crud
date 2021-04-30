@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Student;
 use App\Models\User;
 use Database\Seeders\StudentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -115,7 +116,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_valid_details()
+    public function test_create_valid_details()
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -126,4 +127,193 @@ class StudentTest extends TestCase
 
         $response->assertStatus(201);
     }
+
+    public function test_patch_unique_name_on_first_name_update()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['firstName' => 'Alexia']);
+
+        $response->assertSessionHasErrors(['firstName']);
+    }
+
+    public function test_patch_unique_name_on_middle_name_update()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['firstName' => 'Alex', 'middleName' => 'Claro']);
+
+        $response->assertSessionHasErrors(['middleName']);
+    }
+
+    public function test_patch_unique_name_on_last_name_update()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['firstName' => 'Alex', 'middleName' => 'Claro', 'lastName' => 'Suaner']);
+
+        $response->assertSessionHasErrors(['lastName']);
+    }
+
+    public function test_patch_id_number_taken()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['idNumber' => '20101013809']);
+
+        $response->assertSessionHasErrors(['idNumber']);
+
+    }
+
+    public function test_patch_slmis_number_taken()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['slmisNumber' => '32000']);
+
+        $response->assertSessionHasErrors(['slmisNumber']);
+    }
+
+    public function test_patch_invalid_sex()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['sex' => 'Shemale']);
+
+        $response->assertSessionHasErrors(['sex']);
+    }
+
+    public function test_patch_no_auth_unique_name_on_first_name_update()
+    {
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['firstName' => 'Alexia']);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_patch_no_auth_unique_name_on_middle_name_update()
+    {
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['firstName' => 'Alex', 'middleName' => 'Claro']);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_patch_no_auth_unique_name_on_last_name_update()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['firstName' => 'Alex', 'middleName' => 'Claro', 'lastName' => 'Suaner']);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_patch_no_auth_id_number_taken()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['idNumber' => '20101013809']);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_patch_no_auth_slmis_number_taken()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['slmisNumber' => '32000']);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_patch_no_auth_invalid_sex()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['sex' => 'Shemale']);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_patch_valid_details()
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $this->seed(StudentSeeder::class);
+
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->patch('api/students/' . $id, ['sex' => 'Female']);
+
+        $response->assertStatus(200);
+    }
+
 }
