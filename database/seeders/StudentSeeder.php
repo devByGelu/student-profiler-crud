@@ -23,6 +23,27 @@ class StudentSeeder extends Seeder
             'middleName' => 'Clear',
             'lastName' => 'Suaner',
             'birthday' => '2020/10/10',
+
+        ]);
+
+        Student::insert([
+            'idNumber' => '20101013809',
+            'slmisNumber' => '32000',
+            'sex' => 'Female',
+            'firstName' => 'Alexia',
+            'middleName' => 'Clear',
+            'lastName' => 'Suaner',
+            'birthday' => '2020/10/10',
+        ]);
+
+        Student::insert([
+            'idNumber' => '20101013801',
+            'slmisNumber' => '32001',
+            'sex' => 'Female',
+            'firstName' => 'Alex',
+            'middleName' => 'Claro',
+            'lastName' => 'Suaner',
+            'birthday' => '2020/10/10',
         ]);
     }
 }
