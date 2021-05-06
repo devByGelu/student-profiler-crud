@@ -36,7 +36,7 @@ class FullNameUnique implements Rule
     {
         //
         if ($this->id > 0) {
-            return Student::where('firstName', $this->firstName)->where('middleName', $this->middleName)->where('lastName', $this->lastName)->count() == 0;
+            return Student::where('id', '<>', $this->id)->where('firstName', $this->firstName)->where('middleName', $this->middleName)->where('lastName', $this->lastName)->count() == 0;
         }
         $unique = Student::where('firstName', $this->firstName)->where('middleName', $this->middleName)->where('lastName', $this->lastName)->count() == 0;
         return $unique;
