@@ -30,7 +30,6 @@ class StudentTest extends TestCase
     }
     public function test_create_slmis_number_taken()
     {
-
         Sanctum::actingAs(
             User::factory()->create()
         );
