@@ -364,7 +364,7 @@ class StudentTest extends TestCase
         $this->seed(StudentSeeder::class);
         $id = Student::where("firstName", "Iris")->get()[0]->id;
 
-        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32159', 'sex' => 'Female', 'firstName' => 'Iris', 'middleName' => 'Clear', 'lastName' => 'Suaner', 'birthday' => '2020/10/10']);
+        $response = $this->put('api/students/' . $id, ['idNumber' => '20170013809', 'slmisNumber' => '32159', 'sex' => 'Female', 'firstName' => 'Alexia', 'middleName' => 'Clear', 'lastName' => 'Suaner', 'birthday' => '2020/10/10']);
 
         $response->assertSessionHasErrors(['firstName']);
     }
@@ -399,9 +399,7 @@ class StudentTest extends TestCase
     }
     public function test_put_no_auth_unique_name()
     {
-        Sanctum::actingAs(
-            User::factory()->create()
-        );
+
         $this->seed(StudentSeeder::class);
 
         $id = Student::where("firstName", "Iris")->get()[0]->id;
