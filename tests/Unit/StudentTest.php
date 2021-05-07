@@ -468,4 +468,48 @@ class StudentTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_no_auth_get_students() /* 44  */
+    {
+        $this->seed(StudentSeeder::class);
+
+        $response = $this->get('api/students/');
+
+        $response->assertStatus(302);
+    }
+
+    public function test_get_students() /* 45  */
+    {
+        Sanctum::actingAs(User::factory()->create());
+
+        $this->seed(StudentSeeder::class);
+
+        $response = $this->get('api/students/');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_no_auth_get_student() /* 46  */
+    {
+
+        $this->seed(StudentSeeder::class);
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->get('api/students/' . $id);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_get_student() /* 47  */
+    {
+        Sanctum::actingAs(User::factory()->create());
+
+        $this->seed(StudentSeeder::class);
+        $id = Student::where("firstName", "Iris")->get()[0]->id;
+
+        $response = $this->get('api/students/' . $id);
+
+        $response->assertStatus(200);
+    }
+
 }
