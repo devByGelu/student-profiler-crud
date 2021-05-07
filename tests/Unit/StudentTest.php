@@ -17,7 +17,7 @@ class StudentTest extends TestCase
      *
      * @return void
      */
-    public function test_create_id_number_taken()
+    public function test_create_id_number_taken() /* 7 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -28,7 +28,7 @@ class StudentTest extends TestCase
 
         $response->assertSessionHasErrors(['idNumber']);
     }
-    public function test_create_slmis_number_taken()
+    public function test_create_slmis_number_taken() /* 8 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -39,7 +39,7 @@ class StudentTest extends TestCase
 
         $response->assertSessionHasErrors(['slmisNumber']);
     }
-    public function test_create_invalid_sex()
+    public function test_create_invalid_sex() /* 9 */
     {
 
         Sanctum::actingAs(
@@ -52,7 +52,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['sex']);
     }
 
-    public function test_create_unique_name()
+    public function test_create_unique_name() /* 10 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -64,7 +64,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['firstName']);
     }
 
-    public function test_create_no_auth_id_number_taken()
+    public function test_create_no_auth_id_number_taken() /* 11 */
     {
         $this->seed(StudentSeeder::class);
 
@@ -72,7 +72,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_create_no_auth_slmis_number_taken()
+    public function test_create_no_auth_slmis_number_taken() /* 12 */
     {
 
         Sanctum::actingAs(
@@ -84,7 +84,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_create_no_auth_invalid_sex()
+    public function test_create_no_auth_invalid_sex() /* 13 */
     {
 
         Sanctum::actingAs(
@@ -96,7 +96,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_create_no_auth_unique_name()
+    public function test_create_no_auth_unique_name() /* 14 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -107,7 +107,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_create_no_auth_valid_details()
+    public function test_create_no_auth_valid_details() /* 15 */
     {
         $this->seed(StudentSeeder::class);
 
@@ -115,7 +115,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_create_valid_details()
+    public function test_create_valid_details() /* 16 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -127,7 +127,7 @@ class StudentTest extends TestCase
         $response->assertStatus(201);
     }
 
-    public function test_patch_unique_name_on_first_name_update()
+    public function test_patch_unique_name_on_first_name_update() /* 17 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -142,7 +142,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['firstName']);
     }
 
-    public function test_patch_unique_name_on_middle_name_update()
+    public function test_patch_unique_name_on_middle_name_update() /* 18 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -157,7 +157,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['middleName']);
     }
 
-    public function test_patch_unique_name_on_last_name_update()
+    public function test_patch_unique_name_on_last_name_update() /* 19 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -172,7 +172,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['lastName']);
     }
 
-    public function test_patch_id_number_taken()
+    public function test_patch_id_number_taken() /* 20 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -188,7 +188,7 @@ class StudentTest extends TestCase
 
     }
 
-    public function test_patch_slmis_number_taken()
+    public function test_patch_slmis_number_taken() /* 21 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -203,7 +203,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['slmisNumber']);
     }
 
-    public function test_patch_invalid_sex()
+    public function test_patch_invalid_sex() /* 22 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -218,7 +218,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['sex']);
     }
 
-    public function test_patch_no_auth_unique_name_on_first_name_update()
+    public function test_patch_no_auth_unique_name_on_first_name_update() /* 23 */
     {
         $this->seed(StudentSeeder::class);
 
@@ -229,7 +229,7 @@ class StudentTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_patch_no_auth_unique_name_on_middle_name_update()
+    public function test_patch_no_auth_unique_name_on_middle_name_update() /* 24 */
     {
         $this->seed(StudentSeeder::class);
 
@@ -240,7 +240,7 @@ class StudentTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_patch_no_auth_unique_name_on_last_name_update()
+    public function test_patch_no_auth_unique_name_on_last_name_update() /* 25 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -255,7 +255,7 @@ class StudentTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_patch_no_auth_id_number_taken()
+    public function test_patch_no_auth_id_number_taken() /* 26 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -270,7 +270,7 @@ class StudentTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_patch_no_auth_slmis_number_taken()
+    public function test_patch_no_auth_slmis_number_taken() /* 27 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -285,7 +285,7 @@ class StudentTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_patch_no_auth_invalid_sex()
+    public function test_patch_no_auth_invalid_sex() /* 28 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -300,7 +300,7 @@ class StudentTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_patch_valid_details()
+    public function test_patch_valid_details() /* 29 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -315,7 +315,7 @@ class StudentTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_put_id_number_taken()
+    public function test_put_id_number_taken() /* 30 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -329,9 +329,8 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['idNumber']);
     }
 
-    public function test_put_slmis_number_taken()
+    public function test_put_slmis_number_taken() /* 31 */
     {
-
         Sanctum::actingAs(
             User::factory()->create()
         );
@@ -343,7 +342,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['slmisNumber']);
     }
 
-    public function test_put_invalid_sex()
+    public function test_put_invalid_sex() /* 32 */
     {
 
         Sanctum::actingAs(
@@ -356,7 +355,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['sex']);
     }
 
-    public function test_put_unique_name()
+    public function test_put_unique_name() /* 33 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -369,7 +368,7 @@ class StudentTest extends TestCase
         $response->assertSessionHasErrors(['firstName']);
     }
 
-    public function test_put_no_auth_id_number_taken()
+    public function test_put_no_auth_id_number_taken() /* 34 */
     {
         $this->seed(StudentSeeder::class);
         $id = Student::where("firstName", "Iris")->get()[0]->id;
@@ -378,7 +377,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_put_no_auth_slmis_number_taken()
+    public function test_put_no_auth_slmis_number_taken() /* 35 */
     {
         $this->seed(StudentSeeder::class);
 
@@ -388,7 +387,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_put_no_auth_invalid_sex()
+    public function test_put_no_auth_invalid_sex() /* 36 */
     {
         $this->seed(StudentSeeder::class);
         $id = Student::where("firstName", "Iris")->get()[0]->id;
@@ -397,7 +396,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_put_no_auth_unique_name()
+    public function test_put_no_auth_unique_name() /* 37 */
     {
 
         $this->seed(StudentSeeder::class);
@@ -407,7 +406,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_put_no_auth_valid_details()
+    public function test_put_no_auth_valid_details() /* 38 */
     {
         $this->seed(StudentSeeder::class);
 
@@ -416,7 +415,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_put_valid_details()
+    public function test_put_valid_details() /* 39 */
     {
         Sanctum::actingAs(
             User::factory()->create()
@@ -428,7 +427,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(200);
     }
-    public function test_delete_invalid_id()
+    public function test_delete_invalid_id() /* 40 */
     {
         Sanctum::actingAs(User::factory()->create()
         );
@@ -438,7 +437,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(404);
     }
-    public function test_delete_no_auth_invalid_id()
+    public function test_delete_no_auth_invalid_id() /* 41 */
     {
         $this->seed(StudentSeeder::class);
 
@@ -446,7 +445,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_delete_no_auth_valid_id()
+    public function test_delete_no_auth_valid_id() /* 42 */
     {
         $this->seed(StudentSeeder::class);
 
@@ -456,7 +455,7 @@ class StudentTest extends TestCase
 
         $response->assertStatus(302);
     }
-    public function test_delete_valid_id()
+    public function test_delete_valid_id() /* 43 */
     {
         Sanctum::actingAs(User::factory()->create()
         );
