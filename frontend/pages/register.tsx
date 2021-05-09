@@ -20,6 +20,7 @@ import Head from "next/head";
 import { motion } from "framer-motion";
 import { Form } from "react-final-form";
 import { InputControl } from "../components/final-form-helpers";
+import { APP_URL } from "../constants";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -28,7 +29,7 @@ export default function RegisterPage() {
 
     const checkAuthenticated = async () => {
         try {
-            await axios.get("http://localhost:8000/api/user");
+            await axios.get(`${APP_URL}/api/user`);
             router.push("/");
             setCheckingAuth(false);
         } catch (error) {
@@ -42,17 +43,14 @@ export default function RegisterPage() {
 
     const handleSubmit = async (values) => {
         try {
-            const res: AxiosResponse = await axios.post(
-                `http://localhost:8000/register`,
-                {
-                    email: values.email,
-                    password: values.password,
-                    name: values.name,
-                    password_confirmation: values.password_confirmation,
-                }
-            );
+            const res: AxiosResponse = await axios.post(`${APP_URL}/register`, {
+                email: values.email,
+                password: values.password,
+                name: values.name,
+                password_confirmation: values.password_confirmation,
+            });
 
-            await axios.post("http://localhost:8000/login", {
+            await axios.post(`${APP_URL}/login`, {
                 email: values.email,
                 password: values.password,
             });

@@ -27,6 +27,7 @@ import { Form, Field } from "react-final-form";
 import { AdaptedRadioGroup, InputControl } from "./final-form-helpers";
 import axios, { AxiosResponse } from "axios";
 import _ from "lodash";
+import { APP_URL } from "../constants";
 
 export default function SelectedStudenFormDialog({
     handleSuccess,
@@ -45,7 +46,7 @@ export default function SelectedStudenFormDialog({
         try {
             if (mode === "update") {
                 const res: AxiosResponse = await axios.patch(
-                    `http://localhost:8000/api/students/${student.id}`,
+                    `${APP_URL}/api/students/${student.id}`,
                     {
                         firstName: values.firstName,
                         middleName: values.middleName,
@@ -59,7 +60,7 @@ export default function SelectedStudenFormDialog({
                 console.log(res.data);
             } else {
                 const res: AxiosResponse = await axios.post(
-                    `http://localhost:8000/api/students`,
+                    `${APP_URL}/api/students`,
                     {
                         firstName: values.firstName,
                         middleName: values.middleName,

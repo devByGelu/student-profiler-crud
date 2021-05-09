@@ -15,6 +15,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedStudenFormDialog from "../components/SelectedStudenFormDialog";
 import _ from "lodash";
+import { APP_URL } from "../constants";
 
 export default function Home() {
     interface User {
@@ -30,7 +31,7 @@ export default function Home() {
     const [students, setStudents] = React.useState<IStudent[]>([]);
     const handleClickLogout = async () => {
         try {
-            await axios.post("http://localhost:8000/logout");
+            await axios.post(`${APP_URL}/logout`);
             router.push("/login");
         } catch (error) {
             console.log(error.toJSON());
@@ -43,7 +44,7 @@ export default function Home() {
     };
 
     const getUser = async () => {
-        const api_url = "http://localhost:8000";
+        const api_url = `${APP_URL}`;
         const user_object_route = "api/user";
         try {
             let response: AxiosResponse = await axios.get(
@@ -58,7 +59,7 @@ export default function Home() {
     };
 
     const getStudents = async () => {
-        const api_url = "http://localhost:8000";
+        const api_url = `${APP_URL}`;
         const user_object_route = "api/students";
         try {
             let response: AxiosResponse = await axios.get(
@@ -121,7 +122,7 @@ export default function Home() {
         try {
             await Promise.all(
                 _.map(selectedToDelete, (s) =>
-                    axios.delete(`http://localhost:8000/api/students/${s.id}`)
+                    axios.delete(`${APP_URL}/api/students/${s.id}`)
                 )
             );
             setSelectedToDelete([]);

@@ -18,6 +18,7 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { motion } from "framer-motion";
+import { APP_URL } from "../constants";
 
 export default function SignInPage() {
     const router = useRouter();
@@ -38,12 +39,12 @@ export default function SignInPage() {
 
     const handleClickSignIn = async () => {
         try {
-            await axios.get("http://localhost:8000/sanctum/csrf-cookie");
-            await axios.post("http://localhost:8000/login", {
+            await axios.get(`${APP_URL}/sanctum/csrf-cookie`);
+            await axios.post(`${APP_URL}/login`, {
                 email,
                 password,
             });
-            const api_url = "http://localhost:8000";
+            const api_url = `${APP_URL}`;
             const user_object_route = "api/user";
             await axios.get(`${api_url}/${user_object_route}`);
             router.push("/");
@@ -54,7 +55,7 @@ export default function SignInPage() {
 
     const checkAuthenticated = async () => {
         try {
-            await axios.get("http://localhost:8000/api/user");
+            await axios.get(`${APP_URL}/api/user`);
             router.push("/");
         } catch (error) {
             setCheckingAuth(false);
