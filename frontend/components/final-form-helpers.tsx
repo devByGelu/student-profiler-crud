@@ -19,6 +19,7 @@ const Error = ({ name }) => {
     const {
         meta: { error, submitError, modifiedSinceLastSubmit },
     } = useField(name, {
+        // @ts-ignore
         subscription: { submitError: true, modifiedSinceLastSubmit: true },
     });
     return (
