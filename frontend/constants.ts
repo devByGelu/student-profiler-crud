@@ -1,1 +1,1 @@
-export const APP_URL = "http://studentprofiler.test:8001";
+export const APP_URL = "http://ca3a06de8f86.ngrok.io";

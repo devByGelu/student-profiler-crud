@@ -12,7 +12,7 @@ import {
     Heading,
     Spinner,
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import React from "react";
 import _ from "lodash";
 import { useRouter } from "next/router";
@@ -39,7 +39,10 @@ export default function SignInPage() {
 
     const handleClickSignIn = async () => {
         try {
-            await axios.get(`${APP_URL}/sanctum/csrf-cookie`);
+            const csrf: AxiosResponse = await axios.get(
+                `${APP_URL}/sanctum/csrf-cookie`
+            );
+            console.log(csrf.data);
             await axios.post(`${APP_URL}/login`, {
                 email,
                 password,
